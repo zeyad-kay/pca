@@ -15,7 +15,7 @@
 #### roc x axis is represnted by 1 - specificity, while the y axis is represnted by sensitivity.
 #### for making multi class roc, we had to get each class related with the rest of classes.
 
-### Results
+### ROC Results
 
 #### for auc, classes 0,1,2 and 3 has auc score equal 1.0, 0.7857142857142857, 0.9761904761904762 and 0.9523809523809523 respectively.
 
