@@ -6,8 +6,11 @@ import math
 def train_data(data_path,eigen_faces_num):
     train_images = []
     images = []
+    persons = []
     for filename in os.scandir(data_path):
         if filename.is_file():
+            file = os.path.basename(filename.path)
+            persons.append(file[:file.find("-")])
             img = cv2.imread(filename.path,cv2.IMREAD_GRAYSCALE)
             images.append(img)
             flatten_img = img.flatten()
@@ -25,9 +28,9 @@ def train_data(data_path,eigen_faces_num):
     projections = []
     for i in range(train_images.shape[0]):
         projections.append(eigen_faces[:eigen_faces_num].dot(zero_mean_train[i]))
-    return projections,mean_img,eigen_faces,images
+    return projections,mean_img,eigen_faces,images,persons
 
-def recog_face(test,projections,mean_img,eigen_faces,images,eigen_faces_num,thres):
+def recog_face(test,projections,mean_img,eigen_faces,images,persons,eigen_faces_num,thres):
     test = cv2.cvtColor(test, cv2.COLOR_BGR2GRAY)
     flatten_test = test.flatten()
     zero_mean_test = flatten_test - mean_img
@@ -51,4 +54,4 @@ def recog_face(test,projections,mean_img,eigen_faces,images,eigen_faces_num,thre
         if smallest_dist>imgs_dist:
             smallest_dist=imgs_dist
             img_idx=z
-    return face_detected,images[img_idx]
+    return face_detected,images[img_idx],persons[img_idx]
