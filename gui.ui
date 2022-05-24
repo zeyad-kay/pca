@@ -78,7 +78,7 @@
                <item>
                 <widget class="QLabel" name="label4_9">
                  <property name="text">
-                  <string>Min Size</string>
+                  <string>Min Neighbours</string>
                  </property>
                 </widget>
                </item>

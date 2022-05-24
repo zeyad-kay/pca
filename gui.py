@@ -289,7 +289,7 @@ class Ui_MainWindow(object):
         self.groupBox_4.setTitle(_translate("MainWindow", "Operator settings"))
         self.label4_5.setText(_translate("MainWindow", "Scale Factor"))
         self.scale_factor.setText(_translate("MainWindow", "1.2"))
-        self.label4_9.setText(_translate("MainWindow", "Min Size"))
+        self.label4_9.setText(_translate("MainWindow", "Min Neighbours"))
         self.min_size.setText(_translate("MainWindow", "4"))
         self.label4_8.setText(_translate("MainWindow", "Thickness"))
         self.thickness.setText(_translate("MainWindow", "2"))
