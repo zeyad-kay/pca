@@ -4,9 +4,8 @@ import time
 import sys
 import cv2
 import matplotlib.pyplot as plt
-from src.face_recog import train_data, recog_face
+from src.face_recog import Face_recognition
 from src.face_detection import detect_faces
-from PyQt5.QtWidgets import QMessageBox
 
 
 class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
@@ -25,19 +24,22 @@ class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
 
     def open_image(self):
         self.file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',"", "Image Files (*.png *jpeg *.jpg)")
-        if self.tabWidget.currentIndex( ) == 0:
-            self.input_img = cv2.imread(self.file_path)
-            self.apply_detection()
-            self.apply_button.setEnabled(True)
-            self.scale_factor.setEnabled(True)
-            self.thickness.setEnabled(True)
-            self.min_size.setEnabled(True)
-        else:
-            self.img = cv2.imread(self.file_path)
-            self.img_rgb = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
-            self.display(self.img_rgb,self.widgets[1])
-            self.eigen_num.setEnabled(True)
-            self.apply_button_2.setEnabled(True)
+        if self.file_path != "":
+            if self.tabWidget.currentIndex( ) == 0:
+                self.input_img = cv2.imread(self.file_path)
+                self.apply_detection()
+                self.apply_button.setEnabled(True)
+                self.scale_factor.setEnabled(True)
+                self.thickness.setEnabled(True)
+                self.min_size.setEnabled(True)
+            else:
+                
+                self.img = cv2.imread(self.file_path)
+                self.img_rgb = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
+                self.display(self.img_rgb,self.widgets[1])
+                self.widgets[2].clear()
+                self.eigen_num.setEnabled(True)
+                self.apply_button_2.setEnabled(True)
     def apply_detection(self):
         start = time.time()
         detect_img = detect_faces(self.input_img,float(self.scale_factor.text()),int(self.min_size.text()),int(self.thickness.text()))
@@ -47,12 +49,13 @@ class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
         self.display(self.img_rgb,self.widgets[0])
     
     def recog_img(self):
+        model = Face_recognition(int(self.eigen_num.text()),2250)
         start = time.time()
-        projections,mean_img,eigen_faces,images,persons = train_data("Dataset/train",int(self.eigen_num.text()))
+        model.train("Dataset/train")
         end = time.time()
         self.time_label_2.setText(str("{:.3f}".format(end-start)) + " Seconds")
         start = time.time()
-        detected, matched_img,person = recog_face(self.img,projections,mean_img,eigen_faces,images,persons,int(self.eigen_num.text()),2250)
+        detected, matched_img,person = model.recognize(self.img)
         end = time.time()
         self.time_label_3.setText(str("{:.3f}".format(end-start)) + " Seconds")
         if detected:
