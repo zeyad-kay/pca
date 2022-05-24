@@ -47,13 +47,14 @@ class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
     
     def recog_img(self):
         start = time.time()
-        projections,mean_img,eigen_faces,images = train_data("Dataset/train",int(self.eigen_num.text()))
+        projections,mean_img,eigen_faces,images,persons = train_data("Dataset/train",int(self.eigen_num.text()))
         end = time.time()
         self.time_label_2.setText(str("{:.3f}".format(end-start)) + " Seconds")
         start = time.time()
-        detected, matched_img = recog_face(self.img,projections,mean_img,eigen_faces,images,int(self.eigen_num.text()),10000)
+        detected, matched_img,person = recog_face(self.img,projections,mean_img,eigen_faces,images,persons,int(self.eigen_num.text()),10000)
         end = time.time()
         self.time_label_3.setText(str("{:.3f}".format(end-start)) + " Seconds")
+        self.matched_person.setText(person)
         matched_img_rgb = cv2.cvtColor(matched_img, cv2.COLOR_BGR2RGB)
         self.display(matched_img_rgb,self.widgets[2])
         
