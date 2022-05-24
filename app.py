@@ -6,6 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 from src.face_recog import train_data, recog_face
 from src.face_detection import detect_faces
+from PyQt5.QtWidgets import QMessageBox
 
 
 class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
@@ -51,11 +52,15 @@ class MainWindow(QtWidgets.QMainWindow , gui.Ui_MainWindow):
         end = time.time()
         self.time_label_2.setText(str("{:.3f}".format(end-start)) + " Seconds")
         start = time.time()
-        detected, matched_img,person = recog_face(self.img,projections,mean_img,eigen_faces,images,persons,int(self.eigen_num.text()),10000)
+        detected, matched_img,person = recog_face(self.img,projections,mean_img,eigen_faces,images,persons,int(self.eigen_num.text()),2250)
         end = time.time()
         self.time_label_3.setText(str("{:.3f}".format(end-start)) + " Seconds")
-        self.matched_person.setText(person)
-        matched_img_rgb = cv2.cvtColor(matched_img, cv2.COLOR_BGR2RGB)
+        if detected:
+            self.matched_person.setText(person)
+            matched_img_rgb = cv2.cvtColor(matched_img, cv2.COLOR_BGR2RGB)
+        else:
+            self.matched_person.setText("UNKNOWN")
+            matched_img_rgb = plt.imread("images/unknown.jpeg")
         self.display(matched_img_rgb,self.widgets[2])
         
 
